@@ -37,7 +37,7 @@ export function Header({ role }: HeaderProps) {
     <header className="sticky top-0 z-50 border-b bg-primary text-primary-foreground">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <Link href="/exams" className="text-base font-bold tracking-tight">
-          論文模擬採点
+          模擬採点AI
         </Link>
 
         {/* Desktop nav */}

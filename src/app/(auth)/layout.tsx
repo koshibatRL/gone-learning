@@ -8,10 +8,10 @@ export default function AuthLayout({
       <div className="w-full max-w-sm px-4">
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold tracking-tight text-primary">
-            論文模擬採点
+            模擬採点AI
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            公務員試験 論文模擬採点サービス
+            公務員試験 AI採点システム
           </p>
         </div>
         {children}

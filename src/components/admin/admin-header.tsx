@@ -34,7 +34,7 @@ export function AdminHeader() {
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
         <div className="flex items-center gap-3">
           <Link href="/admin/exams" className="text-base font-bold tracking-tight">
-            論文模擬採点
+            模擬採点AI
           </Link>
           <span className="rounded-sm bg-primary-foreground/20 px-1.5 py-0.5 text-xs font-medium">
             管理

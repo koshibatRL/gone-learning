@@ -10,8 +10,8 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "論文模擬採点",
-  description: "公務員試験 論文模擬採点サービス",
+  title: "模擬採点AI",
+  description: "公務員試験 AI採点システム",
 };
 
 export default function RootLayout({
