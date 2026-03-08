@@ -273,48 +273,38 @@ export function EssayEditor({
           <div
             ref={gridRef}
             className="mx-auto select-none"
-            style={{
-              display: "grid",
-              gridTemplateColumns: `${ROW_NUM_WIDTH}px repeat(${COLS}, ${CELL_SIZE}px)`,
-              width: ROW_NUM_WIDTH + COLS * CELL_SIZE,
-            }}
+            style={{ width: ROW_NUM_WIDTH + COLS * CELL_SIZE }}
           >
-            {Array.from({ length: totalRows }, (_, row) => {
-              const rowCells = Array.from({ length: COLS }, (_, col) => {
-                const i = row * COLS + col;
-                const char = i < gridCells.length ? gridCells[i] : null;
-                const isCursor = focused && i === cursorGridIdx;
-                return (
-                  <div
-                    key={`cell-${i}`}
-                    className={`flex items-center justify-center border border-gray-100 ${
-                      isCursor ? "bg-blue-100" : ""
-                    }`}
-                    style={{
-                      width: CELL_SIZE,
-                      height: CELL_SIZE,
-                      fontSize: CELL_SIZE * 0.6,
-                    }}
-                  >
-                    {char ?? ""}
-                  </div>
-                );
-              });
-
-              return [
+            {Array.from({ length: totalRows }, (_, row) => (
+              <div key={row} className="flex">
                 <div
-                  key={`row-${row}`}
-                  className="flex items-center justify-center text-[10px] text-muted-foreground/40"
-                  style={{
-                    width: ROW_NUM_WIDTH,
-                    height: CELL_SIZE,
-                  }}
+                  className="flex shrink-0 items-center justify-center text-[10px] text-muted-foreground/40"
+                  style={{ width: ROW_NUM_WIDTH, height: CELL_SIZE }}
                 >
                   {row + 1}
-                </div>,
-                ...rowCells,
-              ];
-            }).flat()}
+                </div>
+                {Array.from({ length: COLS }, (_, col) => {
+                  const i = row * COLS + col;
+                  const char = i < gridCells.length ? gridCells[i] : null;
+                  const isCursor = focused && i === cursorGridIdx;
+                  return (
+                    <div
+                      key={col}
+                      className={`flex shrink-0 items-center justify-center border border-gray-100 ${
+                        isCursor ? "bg-blue-100" : ""
+                      }`}
+                      style={{
+                        width: CELL_SIZE,
+                        height: CELL_SIZE,
+                        fontSize: CELL_SIZE * 0.6,
+                      }}
+                    >
+                      {char ?? ""}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
         <textarea
