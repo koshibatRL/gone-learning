@@ -26,7 +26,7 @@ export default async function MainLayout({
   return (
     <div className="min-h-screen">
       <Header role={role} />
-      <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+      <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
     </div>
   );
 }

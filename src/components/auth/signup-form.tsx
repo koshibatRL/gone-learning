@@ -45,9 +45,9 @@ export function SignupForm() {
   }
 
   return (
-    <Card className="border">
+    <Card className="border shadow-sm">
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold tracking-tight">
+        <CardTitle className="text-lg font-bold tracking-tight">
           新規登録
         </CardTitle>
       </CardHeader>
