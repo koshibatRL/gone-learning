@@ -57,7 +57,9 @@ export async function gradeSubmission(submissionId: string): Promise<void> {
   const prompt = buildGradingPrompt(
     submission.exams.prompt_text,
     submission.answer_text,
-    typedSections
+    typedSections,
+    submission.char_count,
+    submission.exams.standard_char_count
   );
 
   // Call Claude with retries

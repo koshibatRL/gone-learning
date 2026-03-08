@@ -20,7 +20,9 @@ function buildSectionsText(sections: EvaluationSectionWithChoices[]): string {
 export function buildGradingPrompt(
   promptText: string,
   answerText: string,
-  sections: EvaluationSectionWithChoices[]
+  sections: EvaluationSectionWithChoices[],
+  charCount: number,
+  standardCharCount: number
 ): string {
   const sectionsText = buildSectionsText(sections);
 
@@ -32,6 +34,10 @@ ${promptText}
 
 【答案】
 ${answerText}
+
+【参考情報】
+- この答案の文字数: ${charCount}字
+- 標準字数: ${standardCharCount}字
 
 【評価セクション・選択肢】
 ${sectionsText}
