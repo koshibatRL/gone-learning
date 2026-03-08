@@ -66,6 +66,11 @@ ANTHROPIC_API_KEY=（Anthropic Console から取得）
    - submission_id (UUID, FK→submissions)
    - section_id (UUID, FK→evaluation_sections)
    - selected_choice_id (UUID, FK→evaluation_choices)
+   - section_title (TEXT, NULLABLE) — 採点時点の評価セクション名スナップショット
+   - section_number (INTEGER, NULLABLE) — 採点時点のセクション番号スナップショット
+   - choice_summary (TEXT, NULLABLE) — 採点時点の選択肢要約スナップショット
+   - choice_feedback_text (TEXT, NULLABLE) — 採点時点のフィードバック本文スナップショット
+   - selected_choice_number (INTEGER, NULLABLE) — 採点時点の選択肢番号スナップショット
    - created_at (TIMESTAMPTZ)
 
 ### RLS設定済み

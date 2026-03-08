@@ -1,16 +1,13 @@
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-export default async function Home() {
+export async function checkAdmin() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
-  }
+  if (!user) return null;
 
   const admin = createAdminClient();
   const { data: userData } = await admin
@@ -19,9 +16,7 @@ export default async function Home() {
     .eq("id", user.id)
     .single();
 
-  if (userData?.role === "admin") {
-    redirect("/admin/exams");
-  }
+  if (userData?.role !== "admin") return null;
 
-  redirect("/exams");
+  return user;
 }
