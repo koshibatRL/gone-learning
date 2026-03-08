@@ -15,7 +15,7 @@ export default async function ExamsPage() {
       <div className="mb-6">
         <h1 className="text-xl font-bold tracking-tight">問題一覧</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          論文問題を選択して、模擬採点を受けましょう
+          問題を選んで模擬採点を受けましょう
         </p>
       </div>
       {exams && exams.length > 0 ? (
