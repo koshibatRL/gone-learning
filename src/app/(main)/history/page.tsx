@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { HistoryTable } from "@/components/history/history-table";
+import { Clock } from "lucide-react";
 
 export default async function HistoryPage() {
   const supabase = await createClient();
@@ -28,8 +29,25 @@ export default async function HistoryPage() {
 
   return (
     <div>
-      <h1 className="mb-4 text-xl font-bold tracking-tight">提出履歴</h1>
-      <HistoryTable items={items} />
+      <div className="mb-6">
+        <h1 className="text-xl font-bold tracking-tight">提出履歴</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          過去の提出と採点結果を確認できます
+        </p>
+      </div>
+      {items.length > 0 ? (
+        <HistoryTable items={items} />
+      ) : (
+        <div className="flex flex-col items-center gap-3 py-16 text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+            <Clock className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <p className="text-sm font-medium">提出履歴がありません</p>
+          <p className="text-sm text-muted-foreground">
+            問題に解答すると、ここに履歴が表示されます。
+          </p>
+        </div>
+      )}
     </div>
   );
 }

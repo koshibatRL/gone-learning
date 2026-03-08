@@ -10,26 +10,29 @@ interface ResultCardProps {
 }
 
 export function ResultCard({
-  sectionNumber,
   sectionTitle,
   choiceSummary,
   feedbackText,
   isPositive,
 }: ResultCardProps) {
   return (
-    <Card>
+    <Card className={isPositive ? "border-success/20" : "border-warning/20"}>
       <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+        <CardTitle className="flex items-center gap-2 text-sm font-medium">
           {isPositive ? (
-            <CircleCheck className="h-4 w-4 text-emerald-500 shrink-0" />
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/10">
+              <CircleCheck className="h-3.5 w-3.5 text-success" />
+            </div>
           ) : (
-            <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-warning/10">
+              <AlertTriangle className="h-3.5 w-3.5 text-warning" />
+            </div>
           )}
-          {sectionTitle}
+          <span className="text-muted-foreground">{sectionTitle}</span>
         </CardTitle>
-        <p className="text-sm font-medium pl-[22px]">{choiceSummary}</p>
+        <p className="text-sm font-medium pl-7">{choiceSummary}</p>
       </CardHeader>
-      <CardContent className="pl-[calc(1.5rem+22px)]">
+      <CardContent className="pl-[calc(1rem+28px)]">
         <div className="rounded-md bg-muted/50 px-3 py-2.5">
           <p className="text-sm leading-relaxed text-muted-foreground">
             {feedbackText}

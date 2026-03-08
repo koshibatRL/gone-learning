@@ -38,9 +38,9 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="border">
+    <Card className="border shadow-sm">
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold tracking-tight">
+        <CardTitle className="text-lg font-bold tracking-tight">
           ログイン
         </CardTitle>
       </CardHeader>

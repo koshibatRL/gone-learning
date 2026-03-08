@@ -41,8 +41,13 @@ export default function AdminExamsPage() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold tracking-tight">問題管理</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight">問題管理</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            問題の作成・編集・評価基準の管理
+          </p>
+        </div>
         <Link href="/admin/exams/new">
           <Button size="sm">
             <Plus className="mr-1 h-4 w-4" />
@@ -51,12 +56,17 @@ export default function AdminExamsPage() {
         </Link>
       </div>
       {exams.length === 0 ? (
-        <p className="text-sm text-muted-foreground">問題がありません。</p>
+        <div className="flex flex-col items-center gap-3 py-16 text-center">
+          <p className="text-sm font-medium">問題がありません</p>
+          <p className="text-sm text-muted-foreground">
+            「新規作成」ボタンから問題を追加してください。
+          </p>
+        </div>
       ) : (
         <div className="space-y-3">
           {exams.map((exam) => (
             <Link key={exam.id} href={`/admin/exams/${exam.id}`}>
-              <Card className="border transition-shadow hover:shadow-sm">
+              <Card className="group border transition-all hover:border-primary/20 hover:shadow-md">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base font-bold tracking-tight">
@@ -73,7 +83,7 @@ export default function AdminExamsPage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground font-mono">
                     ID: {exam.id}
                   </p>
                 </CardContent>

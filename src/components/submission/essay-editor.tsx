@@ -90,7 +90,11 @@ export function EssayEditor({
   const minRows = Math.ceil(standardCharCount / COLS);
   const contentRows = Math.ceil(gridCells.length / COLS) + 2;
   const totalRows = Math.max(minRows, contentRows);
-  const totalCells = totalRows * COLS;
+
+  // Progress bar values
+  const progressPercent = Math.min(ratio * 100, 110);
+  const isInRange = ratio >= 0.8 && ratio <= 1.1;
+  const isTooMany = ratio > 1.1;
 
   // 初期状態で全角スペースを挿入
   useEffect(() => {
@@ -193,19 +197,70 @@ export function EssayEditor({
     }
   }, []);
 
+  // Row number width
+  const ROW_NUM_WIDTH = 32;
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
+      {/* Character count progress bar */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-muted-foreground">
+            標準字数: {standardCharCount}字
+          </span>
+          <span
+            className={
+              isInRange
+                ? "font-medium text-success"
+                : charCount === 0
+                  ? "text-muted-foreground"
+                  : isTooMany
+                    ? "font-medium text-destructive"
+                    : "font-medium text-warning"
+            }
+          >
+            {charCount}字
+            {charCount > 0 && (
+              <span className="ml-1 text-xs text-muted-foreground">
+                ({Math.round(ratio * 100)}%)
+              </span>
+            )}
+          </span>
+        </div>
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+          <div
+            className={`h-full rounded-full transition-all duration-300 ${
+              isInRange
+                ? "bg-success"
+                : isTooMany
+                  ? "bg-destructive"
+                  : charCount === 0
+                    ? "bg-muted-foreground/30"
+                    : "bg-warning"
+            }`}
+            style={{ width: `${Math.min(progressPercent, 100)}%` }}
+          />
+        </div>
+        <div className="flex justify-between text-[10px] text-muted-foreground/60">
+          <span>0</span>
+          <span>{Math.round(standardCharCount * 0.8)}字 (80%)</span>
+          <span>{standardCharCount}字</span>
+        </div>
+      </div>
+
+      {/* Grid editor */}
       <div className="relative">
         <div
-          className="cursor-text overflow-auto rounded-md border bg-white"
+          className="custom-scrollbar cursor-text overflow-auto rounded-lg border bg-white shadow-sm"
           style={{ maxHeight: 600 }}
           onClick={(e) => {
             const textarea = textareaRef.current;
             if (!textarea || !gridRef.current) return;
             textarea.focus({ preventScroll: true });
             const rect = gridRef.current.getBoundingClientRect();
-            const x = e.clientX - rect.left;
+            const x = e.clientX - rect.left - ROW_NUM_WIDTH;
             const y = e.clientY - rect.top;
+            if (x < 0) return;
             const col = Math.min(Math.floor(x / CELL_SIZE), COLS - 1);
             const row = Math.floor(y / CELL_SIZE);
             const gridIdx = row * COLS + Math.max(0, col);
@@ -218,30 +273,38 @@ export function EssayEditor({
           <div
             ref={gridRef}
             className="mx-auto select-none"
-            style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(${COLS}, ${CELL_SIZE}px)`,
-              width: COLS * CELL_SIZE,
-            }}
+            style={{ width: ROW_NUM_WIDTH + COLS * CELL_SIZE }}
           >
-            {Array.from({ length: totalCells }, (_, i) => {
-              const char = i < gridCells.length ? gridCells[i] : null;
-              const isCursor = focused && i === cursorGridIdx;
-              return (
+            {Array.from({ length: totalRows }, (_, row) => (
+              <div key={row} className="flex">
                 <div
-                  key={i}
-                  className="flex items-center justify-center border border-gray-200"
-                  style={{
-                    width: CELL_SIZE,
-                    height: CELL_SIZE,
-                    fontSize: CELL_SIZE * 0.6,
-                    backgroundColor: isCursor ? "#dbeafe" : undefined,
-                  }}
+                  className="flex shrink-0 items-center justify-center text-[10px] text-muted-foreground/40"
+                  style={{ width: ROW_NUM_WIDTH, height: CELL_SIZE }}
                 >
-                  {char ?? ""}
+                  {row + 1}
                 </div>
-              );
-            })}
+                {Array.from({ length: COLS }, (_, col) => {
+                  const i = row * COLS + col;
+                  const char = i < gridCells.length ? gridCells[i] : null;
+                  const isCursor = focused && i === cursorGridIdx;
+                  return (
+                    <div
+                      key={col}
+                      className={`flex shrink-0 items-center justify-center border border-gray-100 ${
+                        isCursor ? "bg-blue-100" : ""
+                      }`}
+                      style={{
+                        width: CELL_SIZE,
+                        height: CELL_SIZE,
+                        fontSize: CELL_SIZE * 0.6,
+                      }}
+                    >
+                      {char ?? ""}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         </div>
         <textarea
@@ -257,22 +320,6 @@ export function EssayEditor({
           disabled={disabled}
           autoComplete="off"
         />
-      </div>
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-muted-foreground">
-          標準字数: {standardCharCount}字
-        </span>
-        <span
-          className={
-            ratio >= 0.8 && ratio <= 1.1
-              ? "font-medium text-success"
-              : charCount === 0
-                ? "text-muted-foreground"
-                : "font-medium text-warning"
-          }
-        >
-          {charCount}字
-        </span>
       </div>
     </div>
   );

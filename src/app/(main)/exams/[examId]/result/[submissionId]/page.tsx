@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { FileText, ClipboardCheck } from "lucide-react";
+import { FileText, ClipboardCheck, RefreshCw, ArrowLeft, RotateCcw } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useSubmissionStatus } from "@/hooks/use-submission-status";
 import { GradingProgress } from "@/components/submission/grading-progress";
 import { AnswerDisplay } from "@/components/submission/answer-display";
 import { ResultSummary } from "@/components/results/result-summary";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type {
   EvaluationSection,
@@ -177,7 +178,17 @@ export default function ResultPage() {
   const totalCount = results.length;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      {/* Back link */}
+      <Link
+        href="/exams"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+        問題一覧
+      </Link>
+
+      {/* Page header */}
       <div>
         <h1 className="text-xl font-bold tracking-tight">
           {status === "evaluated"
@@ -194,6 +205,30 @@ export default function ResultPage() {
           </p>
         )}
       </div>
+
+      {/* Score summary card */}
+      {status === "evaluated" && totalCount > 0 && (
+        <Card className="border-none bg-primary/5">
+          <CardContent className="flex items-center justify-center gap-8 py-6">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary">
+                {positiveCount}
+                <span className="text-lg font-normal text-muted-foreground">
+                  /{totalCount}
+                </span>
+              </div>
+              <p className="mt-0.5 text-xs text-muted-foreground">良好な項目</p>
+            </div>
+            <Separator orientation="vertical" className="h-12" />
+            <div className="text-center">
+              <div className="text-3xl font-bold text-warning">
+                {totalCount - positiveCount}
+              </div>
+              <p className="mt-0.5 text-xs text-muted-foreground">改善点</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Non-evaluated states: single column */}
       {status !== "evaluated" && (
@@ -212,24 +247,30 @@ export default function ResultPage() {
           )}
 
           {status === "error" && (
-            <div className="space-y-3">
-              <p className="text-sm text-destructive">
-                {errorMessage ?? "採点処理中にエラーが発生しました。"}
-              </p>
-              <div className="flex gap-3">
-                <Button
-                  variant="default"
-                  size="sm"
-                  onClick={handleRetry}
-                  disabled={retrying}
-                >
-                  {retrying ? "再採点中..." : "再採点する"}
-                </Button>
-                <Link href={`/exams/${examId}`}>
-                  <Button variant="outline" size="sm">答案作成に戻る</Button>
-                </Link>
-              </div>
-            </div>
+            <Card className="border-destructive/20 bg-destructive/5">
+              <CardContent className="space-y-4 py-6">
+                <p className="text-sm text-destructive">
+                  {errorMessage ?? "採点処理中にエラーが発生しました。"}
+                </p>
+                <div className="flex gap-3">
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={handleRetry}
+                    disabled={retrying}
+                  >
+                    <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${retrying ? "animate-spin" : ""}`} />
+                    {retrying ? "再採点中..." : "再採点する"}
+                  </Button>
+                  <Link href={`/exams/${examId}`}>
+                    <Button variant="outline" size="sm">
+                      <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+                      答案作成に戻る
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
           )}
         </>
       )}
@@ -237,14 +278,14 @@ export default function ResultPage() {
       {/* Evaluated state: two-column layout */}
       {status === "evaluated" && (
         <>
-          <div className="flex flex-col gap-4 md:flex-row md:gap-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:gap-6">
             {/* Left column: answer */}
-            <div className="md:w-1/2 flex flex-col min-h-0">
-              <div className="sticky top-0 z-10 bg-background pb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
+            <div className="lg:w-1/2 flex flex-col min-h-0">
+              <div className="sticky top-14 z-10 bg-background pb-3 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <FileText className="h-4 w-4" />
                 あなたの答案
               </div>
-              <div className="md:max-h-[calc(100vh-14rem)] md:overflow-y-auto md:pr-2">
+              <div className="custom-scrollbar lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto lg:pr-2">
                 {answer && (
                   <AnswerDisplay
                     answerText={answer.answerText}
@@ -255,12 +296,12 @@ export default function ResultPage() {
             </div>
 
             {/* Right column: evaluation */}
-            <div className="md:w-1/2 flex flex-col min-h-0">
-              <div className="sticky top-0 z-10 bg-background pb-2 flex items-center gap-2 text-sm font-medium text-muted-foreground">
+            <div className="lg:w-1/2 flex flex-col min-h-0">
+              <div className="sticky top-14 z-10 bg-background pb-3 flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <ClipboardCheck className="h-4 w-4" />
                 評価結果
               </div>
-              <div className="md:max-h-[calc(100vh-14rem)] md:overflow-y-auto md:pr-2">
+              <div className="custom-scrollbar lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto lg:pr-2">
                 <ResultSummary results={results} />
               </div>
             </div>
@@ -270,7 +311,10 @@ export default function ResultPage() {
           <Separator />
           <div className="flex gap-3">
             <Link href={`/exams/${examId}`}>
-              <Button variant="outline" size="sm">もう一度挑戦</Button>
+              <Button variant="outline" size="sm">
+                <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+                もう一度挑戦
+              </Button>
             </Link>
             <Link href="/history">
               <Button variant="outline" size="sm">提出履歴</Button>
