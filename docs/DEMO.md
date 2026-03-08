@@ -142,7 +142,7 @@
 | 項目 | 詳細 |
 |------|------|
 | **用途** | 論文の自動採点（AI評価エンジン） |
-| **使用モデル** | `claude-sonnet-4-20250514`（Claude Sonnet 4） |
+| **使用モデル** | `claude-sonnet-4-6`（Claude Sonnet 4.6） |
 | **SDK** | `@anthropic-ai/sdk`（公式Node.js SDK） |
 | **最大出力トークン** | 1,024 tokens / リクエスト |
 | **リトライ** | 最大3回（初回 + 2回リトライ、リトライ間隔2秒） |
@@ -479,7 +479,7 @@ evaluation_choices ────────┘     section_id (FK → evaluation
 
 | 項目 | 値 |
 |------|-----|
-| モデル | `claude-sonnet-4-20250514`（Claude Sonnet 4） |
+| モデル | `claude-sonnet-4-6`（Claude Sonnet 4.6） |
 | 最大出力トークン | 1,024 |
 | Temperature | デフォルト（指定なし） |
 
@@ -726,4 +726,6 @@ npx tsx scripts/seed-test-accounts.ts
 
 ---
 
-*本ドキュメントは 2026年3月8日 時点のデモ版を基に作成されています。*
+---
+
+最終更新: 2026-03-08
