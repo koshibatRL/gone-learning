@@ -4,11 +4,10 @@ import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { EssayEditor } from "@/components/submission/essay-editor";
 import { SubmitButton } from "@/components/submission/submit-button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Exam } from "@/types/database";
 
@@ -112,16 +111,15 @@ export default function ExamPage() {
         <h1 className="text-xl font-bold tracking-tight">{exam.title}</h1>
       </div>
 
-      <Card className="border-l-4 border-l-primary bg-card">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
-            出題
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-base leading-relaxed">{exam.prompt_text}</p>
-        </CardContent>
-      </Card>
+      <div className="rounded-lg bg-primary/[0.03] px-5 py-4">
+        <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-primary/60">
+          <BookOpen className="h-3.5 w-3.5" />
+          出題
+        </div>
+        <p className="text-base leading-relaxed text-foreground/90">
+          {exam.prompt_text}
+        </p>
+      </div>
 
       <EssayEditor
         value={answer}
